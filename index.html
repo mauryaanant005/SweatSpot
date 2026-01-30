@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIT Spot – Smart Fitness Companion</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (via CDN for styling framework) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: {
+                            blue: '#00f3ff',
+                            purple: '#bc13fe',
+                            green: '#0aff60'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    
+</head>
+<body class="text-gray-100 p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="text-center mb-10 mt-4">
+        <h1 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-neon-blue to-neon-purple neon-text mb-2">
+            OHHFIT
+        </h1>
+        <p class="text-gray-400 text-lg tracking-wide">Your Personal Smart Fitness Companion</p>
+    </header>
+
+    <!-- Dashboard Grid -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- 1. Workout Timer -->
+        <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-20">
+                <i class="fa-solid fa-stopwatch text-6xl text-neon-blue"></i>
+            </div>
+            <h2 class="text-xl font-semibold mb-6 flex items-center z-10">
+                <i class="fa-solid fa-clock mr-2 text-neon-blue"></i> Workout Timer
+            </h2>
+            
+            <div class="text-5xl font-mono font-bold mb-8 tracking-wider text-white z-10" id="display">
+                00:00:00
+            </div>
+            
+            <div class="flex space-x-4 z-10 w-full">
+                <button onclick="startTimer()" id="startBtn" class="flex-1 bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-semibold transition-colors shadow-lg shadow-green-900/50">
+                    <i class="fa-solid fa-play"></i> Start
+                </button>
+                <button onclick="stopTimer()" id="stopBtn" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-3 rounded-xl font-semibold transition-colors shadow-lg shadow-red-900/50 hidden">
+                    <i class="fa-solid fa-pause"></i> Stop
+                </button>
+                <button onclick="resetTimer()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-colors">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. Step Tracker (Restored) -->
+        <div class="glass-card rounded-2xl p-6 relative">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-shoe-prints mr-2 text-neon-green"></i> Step Tracker
+            </h2>
+            
+            <div class="flex justify-between items-end mb-2">
+                <div>
+                    <span id="stepCount" class="text-4xl font-bold text-white">0</span>
+                    <span class="text-gray-400 text-sm"> / <span id="stepGoalDisplay">10000</span> steps</span>
+                </div>
+                <i class="fa-solid fa-person-walking text-3xl text-gray-500"></i>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-700 rounded-full h-4 mb-6 overflow-hidden">
+                <div id="stepProgress" class="progress-fill bg-gradient-to-r from-neon-green to-emerald-600 h-4 rounded-full" style="width: 0%"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="addSteps(500)" class="bg-indigo-600 hover:bg-indigo-500 text-white py-2 px-4 rounded-lg transition-colors">
+                    +500 Steps
+                </button>
+                <button onclick="resetSteps()" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                    Reset Day
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. BMI Calculator -->
+        <div class="glass-card rounded-2xl p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-weight-scale mr-2 text-neon-purple"></i> BMI Calculator
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs text-gray-400 mb-1 block">Height (cm)</label>
+                        <input type="number" id="heightInput" placeholder="175" class="glass-input w-full p-3 rounded-lg text-center">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400 mb-1 block">Weight (kg)</label>
+                        <input type="number" id="weightInput" placeholder="70" class="glass-input w-full p-3 rounded-lg text-center">
+                    </div>
+                </div>
+
+                <button onclick="calculateBMI()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-900/50">
+                    Check Health Status
+                </button>
+
+                <div id="bmiResult" class="hidden bg-black/20 rounded-lg p-4 mt-4 text-center border border-white/5">
+                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Your BMI</p>
+                    <div class="text-3xl font-bold text-white mb-1" id="bmiValue">0.0</div>
+                    <div class="text-sm font-medium" id="bmiCategory">Normal</div>
+                    <p class="text-xs text-gray-400 mt-2 italic" id="bmiSuggestion">Keep up the good work!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. To-Do Planner -->
+        <div class="glass-card rounded-2xl p-6 md:col-span-2 lg:col-span-1 flex flex-col h-[400px]">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-list-check mr-2 text-yellow-400"></i> Fitness Goals
+            </h2>
+            
+            <div class="flex space-x-2 mb-4">
+                <input type="text" id="taskInput" placeholder="Ex: Do 20 pushups..." class="glass-input flex-1 p-3 rounded-lg" onkeypress="handleEnter(event)">
+                <button onclick="addTask()" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-lg transition-colors">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto flex-1 pr-2" id="taskList">
+                <!-- Tasks injected here -->
+                <div class="text-center text-gray-500 mt-10">
+                    <i class="fa-solid fa-dumbbell text-4xl mb-2 opacity-30"></i>
+                    <p class="text-sm">No tasks yet. Plan your workout!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Calorie Burn Estimator -->
+        <div class="glass-card rounded-2xl p-6 md:col-span-2 lg:col-span-2">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-fire mr-2 text-orange-500"></i> Calorie Estimator
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div class="space-y-4 md:col-span-2">
+                    <div>
+                        <label class="text-xs text-gray-400 mb-1 block">Activity</label>
+                        <select id="activitySelect" class="glass-input w-full p-3 rounded-lg text-gray-300">
+                            <option value="3.5">Walking (Moderate)</option>
+                            <option value="8.0">Running (Jogging)</option>
+                            <option value="11.5">Running (Fast)</option>
+                            <option value="7.5">Cycling</option>
+                            <option value="6.0">Weight Lifting</option>
+                            <option value="8.0">HIIT / Circuit</option>
+                            <option value="10.0">Swimming</option>
+                            <option value="4.0">Yoga</option>
+                        </select>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Duration (mins)</label>
+                            <input type="number" id="durationInput" placeholder="30" class="glass-input w-full p-3 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 mb-1 block">Current Weight (kg)</label>
+                            <input type="number" id="calWeightInput" placeholder="70" class="glass-input w-full p-3 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center h-full">
+                    <button onclick="calculateCalories()" class="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white py-3 rounded-lg font-semibold shadow-lg shadow-orange-900/50 mb-4">
+                        Estimate Burn
+                    </button>
+                    
+                    <div class="text-center p-4 bg-black/30 rounded-xl border border-white/5">
+                        <p class="text-gray-400 text-xs">ESTIMATED BURN</p>
+                        <div class="text-4xl font-bold text-orange-400 my-1">
+                            <span id="calResult">0</span> <span class="text-lg text-gray-500">kcal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center text-gray-600 mt-12 mb-6 text-sm">
+        <p>&copy; 2026 FIT Spot. Stay Active.</p>
+    </footer>
+
+    <script src="script.js">
+        
+
+    </script>
+</body>
+</html>
